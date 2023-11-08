@@ -10,6 +10,6 @@ Register on and login to https://openrouteservice.org to get a token. Insert you
 
 In order to generate mock trips run the script with ```node main.js```.
 
-Default params can be changed either directly in main.js file or by passing them via commandline in the following order ```node main.js <cityid> <startAt> <bikes>```
-where ```cityid``` it the id of the document with geometrydata you want to use for city zones and forbidden zones within the city. ```startAt``` is the number of bike-routes file you want to start from, do not use default each time as it will overwrite existing files. ```bikes``` is the number of bikes you want to generate routes for. 
+Default params can be changed either directly in main.js file or by passing them via commandline in the following order ```node main.js <cityid> <bikes>```
+where ```cityid``` it the id of the document with geometrydata you want to use for city zones and forbidden zones within the city, and  ```bikes``` is the number of bikes you want to generate routes for. 
 
