@@ -1,7 +1,8 @@
 # Summary
 
 This program uses https://openrouteservice.org API for auto-generating a number of consequent routes (end point for route n = start point for route n+1) for electric bikes, which takes into consideration obstacles and any polygons to avoid defined by yourself. See file /src/cities/1.json as where city.coords and city.forbidden are required.
-Your generated routes will be saved to /src/bike-routes with one .json file per bike
+
+Your generated routes will be saved to /src/bike-routes with one .json file per bike and also a csv file with all routes. The csv file contains the routes as string-encoded polylines. The Json files contain two arrays each - one with routes as string-encoded polylines and the other with coordinates as arrays.
 
 # Getting started
 

@@ -3,7 +3,14 @@ const geoPointInPolygon = require('geo-point-in-polygon');
 const token = require('../token.js');
 
 const tripGenerator = {
+    /**
+     * Coordinates of the city as polygon
+     */
     cityCoords: {},
+    /**
+     * Coordinates of the forbidden zones within the city,
+     * an array of Polygons
+     */
     forbidden: [],
 
     setCoords: async function setCoords(cityid) {

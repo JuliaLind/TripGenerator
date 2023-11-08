@@ -57,6 +57,7 @@ if (process.argv[4]) {
 
             bikeObj.trips_encoded.push(trip);
             bikeObj.trips.push(trip_decoded);
+            fs.appendFileSync("./src/bike-routes/routes.csv", `"${bike}","${i}","${trip}"\r\n`);
 
             startPoint = endPoint;
             endPoint = tripGenerator.getPoint();
