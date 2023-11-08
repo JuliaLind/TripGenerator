@@ -1,0 +1,18 @@
+{
+  "name": "testapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@mapbox/polyline": "^1.2.1",
+    "@turf/random": "^6.5.0",
+    "geo-point-in-polygon": "^1.0.0",
+    "mongodb": "^6.0.0",
+    "random-points-on-polygon": "^0.0.4"
+  }
+}
