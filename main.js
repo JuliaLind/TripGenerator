@@ -41,17 +41,34 @@ let stopAt = counter.bikes + bikes;
         const bikeObj = {
             city: cityid,
             initialStart: startPoint,
+            time_distance: [],
             trips: [],
             trips_encoded: []
         };
 
         for (let i=1; i<=routesPerBike; i++) {
             const trip = await tripGenerator.getTripCoords(startPoint, endPoint);
-            const trip_decoded = tripGenerator.reverseCoords((polyline.decode(trip)));
+            const trip_decoded = tripGenerator.reverseCoords((polyline.decode(trip.geometry)));
 
             // encode again to get coords in correct order in encoded polyline
             const trip_encoded = polyline.encode(trip_decoded);
 
+
+            let waypoint_counter = 1;
+            const time_distance = trip.steps.map((waypoint) => {
+                fs.appendFileSync("./src/bike-routes/time-distance.csv", `"${bike}","${i}","${waypoint_counter}","${waypoint.distance}","${waypoint.duration}"\r\n`);
+
+                waypoint_counter++;
+                return {
+                    distance: waypoint.distance,
+                    duration: waypoint.duration
+                }
+            })
+
+            console.log(`count coords for bike ${bike}, trip ${i}: `, trip_decoded.length);
+            console.log(`count waypoints for bike ${bike}, trip ${i}: `, time_distance.length)
+
+            bikeObj.time_distance.push(time_distance);
             bikeObj.trips_encoded.push(trip_encoded);
             bikeObj.trips.push(trip_decoded);
 
