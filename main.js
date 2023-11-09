@@ -48,9 +48,10 @@ let stopAt = counter.bikes + bikes;
         for (let i=1; i<=routesPerBike; i++) {
             const trip = await tripGenerator.getTripCoords(startPoint, endPoint);
             const trip_decoded = tripGenerator.reverseCoords((polyline.decode(trip)));
+
             // encode again to get coords in correct order in encoded polyline
             const trip_encoded = polyline.encode(trip_decoded);
-            console.log("polyline decoded after reverse", polyline.decode(trip_encoded));
+
             bikeObj.trips_encoded.push(trip_encoded);
             bikeObj.trips.push(trip_decoded);
 
