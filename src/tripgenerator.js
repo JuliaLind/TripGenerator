@@ -72,6 +72,10 @@ const tripGenerator = {
         const resJson = await res.json();
 
         return resJson.routes[0].geometry;
+    },
+
+    reverseCoords: function reverseCoords(coordsArr) {
+        return coordsArr.map((coord) => coord.reverse());
     }
 }
 

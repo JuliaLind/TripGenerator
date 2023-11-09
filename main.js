@@ -47,13 +47,15 @@ let stopAt = counter.bikes + bikes;
 
         for (let i=1; i<=routesPerBike; i++) {
             const trip = await tripGenerator.getTripCoords(startPoint, endPoint);
-            const trip_decoded = polyline.decode(trip);
-
-            bikeObj.trips_encoded.push(trip);
+            const trip_decoded = tripGenerator.reverseCoords((polyline.decode(trip)));
+            // encode again to get coords in correct order in encoded polyline
+            const trip_encoded = polyline.encode(trip_decoded);
+            console.log("polyline decoded after reverse", polyline.decode(trip_encoded));
+            bikeObj.trips_encoded.push(trip_encoded);
             bikeObj.trips.push(trip_decoded);
 
             // Append one trip to the general csv file
-            fs.appendFileSync("./src/bike-routes/routes.csv", `"${bike}","${i}","${trip}"\r\n`);
+            fs.appendFileSync("./src/bike-routes/routes.csv", `"${bike}","${i}","${trip_encoded}"\r\n`);
 
             startPoint = endPoint;
             endPoint = tripGenerator.getPoint();
