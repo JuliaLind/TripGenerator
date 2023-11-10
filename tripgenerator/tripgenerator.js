@@ -1,7 +1,6 @@
 const randomPointsOnPolygon = require('random-points-on-polygon');
 const geoPointInPolygon = require('geo-point-in-polygon');
 const token = require('../token.js');
-
 const fs = require('fs');
 const polyline = require('@mapbox/polyline');
 const counter = require("../counter.json")
@@ -18,6 +17,11 @@ const tripGenerator = {
      */
     forbidden: [],
 
+    /**
+     * Sets the coordinates for city area and the forbidden zones
+     * @param {Number} cityid  - number of the json document containing
+     * the city data
+     */
     setCoords: async function setCoords(cityid) {
         const city = require(`../cities/${cityid}.json`);
 
@@ -29,6 +33,11 @@ const tripGenerator = {
         }
     },
 
+    /**
+     * Returns an array with lat and long coords,
+     * within the city area but not in any of the forbidden zones
+     * @returns {array}
+     */
     getPoint: function getPoint() {
         const numberOfPoints = 1;
         const polygon = this.cityCoords;
@@ -55,6 +64,14 @@ const tripGenerator = {
         return point;
     },
 
+    /**
+     * 
+     * @param {array} start array with lat and long coords for start point
+     * @param {array} end array with lat and long coords for end point
+     * @returns an associative array containing polyline-encoded coordinates
+     * for a route between start point and end point and an array containing
+     * duration and distance data for waypoints along the coords
+     */
     getTripCoords: async function getTripCoords(start, end) {
         let params = {
             coordinates:[start, end],
@@ -84,10 +101,14 @@ const tripGenerator = {
             steps: resJson.routes[0].segments[0].steps
         };
 
-        // return resJson.routes[0].geometry;
         return route;
     },
 
+    /**
+     * Reverses the coordinates to be in "geojson"-order
+     * @param {array} coordsArr - array with lng lat coords
+     * @returns {array} coords in reversed order
+     */
     reverseCoords: function reverseCoords(coordsArr) {
         return coordsArr.map((coord) => coord.reverse());
     },
@@ -113,8 +134,6 @@ const tripGenerator = {
         
                     // encode again to get coords in correct order in encoded polyline
                     const trip_encoded = polyline.encode(trip_decoded);
-        
-        
                     let waypoint_counter = 1;
                     const time_distance = trip.steps.map((waypoint) => {
                         fs.appendFileSync("./bike-routes/time-distance.csv", `"${bike}","${i}","${waypoint_counter}","${waypoint.distance}","${waypoint.duration}"\r\n`);
