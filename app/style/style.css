@@ -1,0 +1,40 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 100%;
+}
+
+body {
+    line-height: 1.4;
+    font-family: sans-serif;
+    position: relative;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    min-height: 100vh; 
+}
+
+.bike-container {
+    display: flex;
+    width: 30vw;
+    height: 100vh;
+    overflow: scroll;
+}
+
+.map-container {
+    height: 100vh;
+    width: 100%;
+}
+
+.map {
+    height: 100%;
+    /* height: -webkit-fill-available; */
+    width: 100%;
+}
