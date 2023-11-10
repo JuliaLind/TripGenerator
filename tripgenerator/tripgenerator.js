@@ -58,6 +58,7 @@ const tripGenerator = {
     getTripCoords: async function getTripCoords(start, end) {
         let params = {
             coordinates:[start, end],
+            preference:"shortest",
             options:
             {
                 avoid_polygons:
@@ -117,24 +118,21 @@ const tripGenerator = {
                     let waypoint_counter = 1;
                     const time_distance = trip.steps.map((waypoint) => {
                         fs.appendFileSync("./bike-routes/time-distance.csv", `"${bike}","${i}","${waypoint_counter}","${waypoint.distance}","${waypoint.duration}"\r\n`);
-        
+
                         waypoint_counter++;
                         return {
                             distance: waypoint.distance,
                             duration: waypoint.duration
                         }
                     })
-        
-                    console.log(`count coords for bike ${bike}, trip ${i}: `, trip_decoded.length);
-                    console.log(`count waypoints for bike ${bike}, trip ${i}: `, time_distance.length)
-        
+
                     bikeObj.time_distance.push(time_distance);
                     bikeObj.trips_encoded.push(trip_encoded);
                     bikeObj.trips.push(trip_decoded);
         
                     // Append one trip to the general csv file
                     fs.appendFileSync("./bike-routes/routes.csv", `"${bike}","${i}","${trip_encoded}"\r\n`);
-        
+
                     startPoint = endPoint;
                     endPoint = this.getPoint();
                 } catch(error) {
