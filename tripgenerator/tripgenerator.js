@@ -19,7 +19,7 @@ const tripGenerator = {
     forbidden: [],
 
     setCoords: async function setCoords(cityid) {
-        const city = require(`./cities/${cityid}.json`);
+        const city = require(`../cities/${cityid}.json`);
 
         this.cityCoords = city.coords;
         this.cityid = cityid;
@@ -116,7 +116,7 @@ const tripGenerator = {
         
                     let waypoint_counter = 1;
                     const time_distance = trip.steps.map((waypoint) => {
-                        fs.appendFileSync("./src/bike-routes/time-distance.csv", `"${bike}","${i}","${waypoint_counter}","${waypoint.distance}","${waypoint.duration}"\r\n`);
+                        fs.appendFileSync("../bike-routes/time-distance.csv", `"${bike}","${i}","${waypoint_counter}","${waypoint.distance}","${waypoint.duration}"\r\n`);
         
                         waypoint_counter++;
                         return {
@@ -133,7 +133,7 @@ const tripGenerator = {
                     bikeObj.trips.push(trip_decoded);
         
                     // Append one trip to the general csv file
-                    fs.appendFileSync("./src/bike-routes/routes.csv", `"${bike}","${i}","${trip_encoded}"\r\n`);
+                    fs.appendFileSync("../bike-routes/routes.csv", `"${bike}","${i}","${trip_encoded}"\r\n`);
         
                     startPoint = endPoint;
                     endPoint = this.getPoint();
@@ -144,12 +144,12 @@ const tripGenerator = {
             }
     
             // Save all trips for one bike to a new json file
-            fs.writeFileSync(`./src/bike-routes/${bike}.json`, JSON.stringify(bikeObj, null, 4));
+            fs.writeFileSync(`../bike-routes/${bike}.json`, JSON.stringify(bikeObj, null, 4));
             counter.bikes += 1;
         }
         // Update the number in the counter file, in order to not use
         // same "bike ids" next time
-        fs.writeFileSync(`./counter.json`, JSON.stringify(counter, null, 4));
+        fs.writeFileSync(`../counter.json`, JSON.stringify(counter, null, 4));
     }
 }
 
