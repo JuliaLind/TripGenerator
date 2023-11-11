@@ -113,18 +113,30 @@ const tripGenerator = {
         return coordsArr.map((coord) => coord.reverse());
     },
 
-    generateMany: async function generateMany(bikes, routesPerBike=4) {
+    /**
+     * 
+     * @param {int} bikes - number of bikes to generate routes for
+     * @param {int} routesPerBike - number of routes to generate for each bike
+     * @param {bool} sameStartEnd - default is true which means that endpoint of last
+     * trip will be start point of first trip, set to false if this is not a requirement
+     */
+    generateMany: async function generateMany(bikes, routesPerBike=3, sameStartEnd=true) {
         const stopAt = counter.bikes + bikes;
 
         for (let bike=counter.bikes; bike<stopAt; bike++) {
-            let startPoint = this.getPoint();
+            const initial = this.getPoint();
+            let startPoint = initial;
             let endPoint = this.getPoint();
+
+            while (endPoint === startPoint) {
+                endPoint = this.getPoint();
+            }
             const bikeObj = {
                 city: this.cityid,
                 initialStart: startPoint,
-                time_distance: [],
                 trips: [],
-                trips_encoded: []
+                trips_encoded: [],
+                time_distance: [],
             };
     
             for (let i=1; i<=routesPerBike; i++) {
@@ -153,7 +165,14 @@ const tripGenerator = {
                     fs.appendFileSync("./bike-routes/routes.csv", `"${bike}","${i}","${trip_encoded}"\r\n`);
 
                     startPoint = endPoint;
-                    endPoint = this.getPoint();
+                    if (i === routesPerBike - 1 && sameStartEnd && routesPerBike > 2) {
+                        endPoint = initial;
+                    } else {
+                        while (endPoint === startPoint) {
+                            endPoint = this.getPoint();
+                        }
+                    }
+
                 } catch(error) {
                     console.error(error.name, error.message)
                 }
