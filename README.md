@@ -4,6 +4,8 @@ This program uses https://openrouteservice.org API for auto-generating a number 
 
 Your generated routes will be saved to /bike-routes with one .json file per bike and also a csv file with all routes. The csv file contains the routes as string-encoded polylines. The Json files contain two arrays each - one with routes as string-encoded polylines and the other with coordinates as arrays.
 
+The repo also contains a simple web application where you can view the generated routes on a map. Select or unselect the routes to view using checkboxes in the menu on the left.
+
 
 # Getting started
 
