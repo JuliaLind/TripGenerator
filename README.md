@@ -19,5 +19,9 @@ Default params for routes per bike and sameStartEnd can only be changed via main
 
 In the directory reset/ you can find a bash script that removes all previously generated routes and resets counter to zero. When starting the script with ```./reset.bash``` you will be prompted to confirm if you really wish to reset. You can confirm with any of Y | y | Yes | yes
 
+# Good to know
+
+For now the script does not support "complicated" shapes for city as it increases the risk for the routes to go outside of city zone. Forbidden zones can be any shape though
+
 
 
