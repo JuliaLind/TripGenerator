@@ -1,8 +1,8 @@
 /**
  * Helper function for creating new elements
  * @param {string} hyperscript
- * @param {Object} [attributes={}]
- * @param {Object} [options={}]
+ * @param {Object} [attributes]
+ * @param {Object} [options]
  * @returns {HTMLElement}
  */
 function createElement(hyperscript, attributes={}, options={}) {
