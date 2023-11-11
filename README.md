@@ -21,7 +21,9 @@ In the directory reset/ you can find a bash script that removes all previously g
 
 # Good to know
 
-For now the script does not support "complicated" shapes for city as it increases the risk for the routes to go outside of city zone. Forbidden zones can be any shape though
+Make sure to include the area(s) right outside of city borders into the list of forbidden zones, otherwise the routes may go outside of the zone.
+
+Note that OpenRoutService has a request limitation on free of charge account which currently is limited at 40 requests per minute (2000 requests per day).
 
 
 
