@@ -20,7 +20,7 @@ export const addMap = async (counter) => {
     let geojsonFeature = city.coords;
     L.geoJSON(geojsonFeature, {
         style: {
-            color: 'green',
+            color: '#eb1c0d',
             fillOpacity: 0
         }
     }).addTo(map);
