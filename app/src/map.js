@@ -18,7 +18,12 @@ export const addMap = async (counter) => {
     const cityFile = await fetch(`../../cities/${cityid}.json`);
     const city = await cityFile.json();
     let geojsonFeature = city.coords;
-    L.geoJSON(geojsonFeature).addTo(map);
+    L.geoJSON(geojsonFeature, {
+        style: {
+            color: 'green',
+            fillOpacity: 0
+        }
+    }).addTo(map);
 
     for (const zone of city.forbidden) {
         geojsonFeature = {
@@ -26,7 +31,13 @@ export const addMap = async (counter) => {
             properties: {},
             geometry: zone
         };
-        L.geoJSON(geojsonFeature).addTo(map);
+        L.geoJSON(geojsonFeature, {
+            style: {
+            color: '#eb1c0d',
+            fillColor: '#eb1c0d',
+            fillOpacity: 0.3
+        }
+        }).addTo(map);
     }
 
 
