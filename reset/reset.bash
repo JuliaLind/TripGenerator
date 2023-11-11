@@ -27,6 +27,9 @@ function main {
                 do
                     rm "$target"
                 done
+                echo "Generating new csv files..."
+                printf "\"bike\",\"route_nr\",\"coords_as_polyline\"\\r\\n" > ../bike-routes/routes.csv
+                printf "\"bike\",\"route_nr\",\"waypoint_nr\",\"distance\",\"duration\"\\r\\n" > ../bike-routes/time-distance.csv
                 echo "Resetting counter..."
                 node './reset.js'
                 echo "Done!"
