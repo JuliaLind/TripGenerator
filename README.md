@@ -1,3 +1,5 @@
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/JuliaLind/TripGenerator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/JuliaLind/TripGenerator/?branch=master)  
+
 # Summary
 
 This program uses https://openrouteservice.org API for auto-generating a number of consequent routes (end point for route n = start point for route n+1) for electric bikes, which takes into consideration obstacles and any polygons to avoid defined by yourself. See file /cities/1.json as where city.coords and city.forbidden are required.
