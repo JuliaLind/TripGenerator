@@ -84,7 +84,7 @@ export const addMap = async (counter) => {
                     map.removeLayer(bikeRoute);
                     console.log("removed", bikeRoute);
                 }
-            })
+            });
         }
     }
 }
