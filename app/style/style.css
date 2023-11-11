@@ -26,6 +26,8 @@ body {
     width: 30vw;
     height: 100vh;
     overflow: scroll;
+    padding: 1.5rem;
+    justify-content: center;
 }
 
 .map-container {
@@ -37,4 +39,23 @@ body {
     height: 100%;
     /* height: -webkit-fill-available; */
     width: 100%;
+}
+
+ul {
+    padding: 1rem;
+}
+
+li {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+li.bike-item {
+    font-weight: 600;
+}
+
+li.route-item {
+    font-weight: 400;
 }
