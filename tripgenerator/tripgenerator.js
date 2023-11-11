@@ -95,7 +95,6 @@ const tripGenerator = {
             body: JSON.stringify(params)
         });
         const resJson = await res.json();
-
         const route = {
             geometry: resJson.routes[0].geometry,
             steps: resJson.routes[0].segments[0].steps
