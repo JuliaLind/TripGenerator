@@ -1,4 +1,4 @@
-const tripGenerator = require("./tripgenerator/tripgenerator.js");
+const tripGenerator = require("./src/tripgenerator.js");
 
 
 (async function () {
