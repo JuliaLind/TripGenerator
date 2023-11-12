@@ -64,17 +64,14 @@ export const addMap = async (counter) => {
             for (const coord of bike.trips[j]) {
                 const geoJsonPoint = {
                     type: "Feature",
-                    properties: {
-                        popupContent: `Bike ${i}, route ${j}`,
-                    },
+                    properties: {},
                     geometry: {
                         "type": "Point",
                         "coordinates": coord
                     }
                 }
                 const marker = L.geoJSON(
-                    geoJsonPoint,
-                    {icon: icon});
+                    geoJsonPoint).bindPopup(`Bike ${i}, route ${j}`);
                 bikeCoords.push(marker);
                 // const marker = L.marker(
                 //     coord.reverse(),
