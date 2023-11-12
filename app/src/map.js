@@ -71,7 +71,7 @@ export const addMap = async (counter) => {
                     }
                 }
                 const marker = L.geoJSON(
-                    geoJsonPoint).bindPopup(`Bike ${i}, route ${j}`);
+                    geoJsonPoint).bindPopup(`Bike ${i}, route ${j+1}`);
                 bikeCoords.push(marker);
                 // const marker = L.marker(
                 //     coord.reverse(),
