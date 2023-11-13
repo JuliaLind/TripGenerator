@@ -52,12 +52,12 @@ export const addMap = async (counter) => {
         const routeList = createElement("ul.route-list");
         bikeItem.appendChild(routeList);
 
-        const icon = L.icon({
-            iconUrl:      `./app/src/marker-icon.png`,
-            iconSize:     [10, 10],
-            iconAnchor:   [12, 12],
-            popupAnchor:  [9, -3]
-        });
+        // const icon = L.icon({
+        //     iconUrl:      `./app/src/marker-icon.png`,
+        //     iconSize:     [10, 10],
+        //     iconAnchor:   [12, 12],
+        //     popupAnchor:  [9, -3]
+        // });
 
         for (let j = 0; j<bike.trips.length; j++) {
             const bikeCoords = [];
