@@ -9,11 +9,12 @@ const tripGenerator = {
     cityid: 1,
     /**
      * Coordinates of the city as polygon
+     * Note! Loaded from file!
      */
     cityCoords: {},
     /**
      * Coordinates of the forbidden zones within the city,
-     * an array of Polygons
+     * an array of Polygons - Note! loaded from json file!
      */
     forbidden: [],
     /**
@@ -180,8 +181,10 @@ const tripGenerator = {
                 trips_encoded: [],
                 time_distance: [],
             };
+
+            let route = 1
     
-            for (let i=1; i<=this.routesPerBike; i++) {
+            while (route<=this.routesPerBike) {
                 try {
                     const trip = await this.getTripCoords(startPoint, endPoint);
                     const trip_decoded = this.reverseCoords((polyline.decode(trip.geometry)));
@@ -190,7 +193,7 @@ const tripGenerator = {
                     const trip_encoded = polyline.encode(trip_decoded);
                     let waypoint_counter = 1;
                     const time_distance = trip.steps.map((waypoint) => {
-                        fs.appendFileSync("./bike-routes/time-distance.csv", `"${bike}","${i}","${waypoint_counter}","${waypoint.distance}","${waypoint.duration}"\r\n`);
+                        fs.appendFileSync("./bike-routes/time-distance.csv", `"${bike}","${route}","${waypoint_counter}","${waypoint.distance}","${waypoint.duration}"\r\n`);
     
                         waypoint_counter++;
                         return {
@@ -204,14 +207,14 @@ const tripGenerator = {
                     bikeObj.trips.push(trip_decoded);
         
                     // Append one trip to the general csv file
-                    fs.appendFileSync("./bike-routes/routes.csv", `"${bike}","${i}","${trip_encoded}"\r\n`);
+                    fs.appendFileSync("./bike-routes/routes.csv", `"${bike}","${route}","${trip_encoded}"\r\n`);
     
                     startPoint = endPoint;
+                    route++;
                 } catch (error) {
-                    i--
                     console.log(error, "Bad response from OpenRouteService, will redo 1 route")
                 }
-                if (i === this.routesPerBike - 1 && this.sameStartEnd && this.routesPerBike > 2) {
+                if (route === this.routesPerBike - 1 && this.sameStartEnd && this.routesPerBike > 2) {
                     endPoint = initial;
                 } else {
                     while (endPoint === startPoint) {
