@@ -15,9 +15,15 @@ In order to generate mock trips stand in the root directory and run the script w
 
 In order to start the web application where you can see the generated routes on the map, stand in the root directory and enter ```python3 -m http.server 9000``` and then visit localhost:9000 in your browser.
 
-Cityid, number of bikes to generate routes for, number of routes per bike, wether the endpoint of last route should be same as startpoint of first route for each bike should be same or not, mindistance and maxdistance (birdway) are all attributes in src/tripgenerator.js and can be updated by yourself.
+The following attributes are variable and can be set by yourself in the src/tripgenerator.js model:
+- cityid: the id of the document with geometrydata you want to use for city zones and forbidden zones within the city
+- number of bikes to generate routes for
+- number of routes to generate per bike
+- minimum distance between start point and end point of each route (birdway)
+- maximum distance between start point and end point of each route (birdway)
+- if the end point of the last route should be the same as start point of first route (for each bike, comes in handy if you want to loop through same sequence several times)
 
-Default params for cityid and number of bikes can also be passed via commandline in the following order ```node main.js <cityid> <bikes>```, where ```cityid``` it the id of the document with geometrydata you want to use for city zones and forbidden zones within the city, and  ```bikes``` is the number of bikes you want to generate routes for. 
+Values for cityid and number of bikes can also be passed via commandline in the following order ```node main.js <cityid> <bikes>```, where ```cityid``` it the id of the document with geometrydata you want to use for city zones and forbidden zones within the city, and  ```bikes``` is the number of bikes you want to generate routes for. 
 
 
 In the directory reset/ you can find a bash script that removes all previously generated routes and resets counter to zero. When starting the script with ```./reset.bash``` you will be prompted to confirm if you really wish to reset. You can confirm with any of Y | y | Yes | yes
