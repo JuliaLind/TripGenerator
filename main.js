@@ -13,14 +13,7 @@ const tripGenerator = require("./src/tripgenerator.js");
      */
     let bikes = 5;
 
-    /**
-     * Number of subsequent routes (endpoint for route n = startpoint for route n + 1)
-     * that will be generated for each bike. If number of routes per bike is higher than
-     * 2 then endpoint of the last route will be start-point of first route
-     */
-    const routesPerBike = 3;
 
-    let sameStartEnd = true;
 
     /**
      * These can be passed into script from commandline
@@ -33,5 +26,5 @@ const tripGenerator = require("./src/tripgenerator.js");
     }
 
     tripGenerator.setCoords(cityid);
-    tripGenerator.generateMany(bikes, routesPerBike, sameStartEnd);
+    tripGenerator.generateMany(bikes);
 })();

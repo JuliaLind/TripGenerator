@@ -16,6 +16,30 @@ const tripGenerator = {
      * an array of Polygons
      */
     forbidden: [],
+    /**
+     * Set this attribute to false if you do not want the
+     * endpoint of last trip to be the same as startpoint of first trip
+     */
+    sameStartEnd: true,
+    
+    /**
+     * Number of subsequent routes (endpoint for route n = startpoint for route n + 1)
+     * that will be generated for each bike. If number of routes per bike is higher than
+     * 2 then endpoint of the last route will be start-point of first route
+     */
+    routesPerBike: 3,
+
+    /**
+     * Maximal distance between start and endpoint
+     * of a trip "birdway"
+     */
+    maxDistance: 0.0549976308604803,
+
+    /**
+     * Minimal distance between start and endpoint
+     * of a trip "birdway"
+     */
+    minDistance: 0.0192575756257603,
 
     /**
      * Sets the coordinates for city area and the forbidden zones
@@ -33,12 +57,24 @@ const tripGenerator = {
         }
     },
 
+    withinDistance: function withinDistance(startpoint, endpoint) {
+        console.log("start: ", startpoint);
+        console.log("end: ", endpoint);
+
+        /**
+         * distance is square root of (delta-x squared + delta-y squared)
+         */
+        const distance = ((startpoint[0]-endpoint[0]) ** 2 + (startpoint[1]-endpoint[1]) ** 2) ** (1/2);
+
+        return distance >= this.minDistance ** 2 && distance <= this.maxDistance ** 2;
+    },
+
     /**
      * Returns an array with lat and long coords,
      * within the city area but not in any of the forbidden zones
      * @returns {array}
      */
-    getPoint: function getPoint() {
+    getPoint: function getPoint(startPoint=null) {
         const numberOfPoints = 1;
         const polygon = this.cityCoords;
         let point;
@@ -46,19 +82,26 @@ const tripGenerator = {
         while (!point) {
             let temp = randomPointsOnPolygon(numberOfPoints, polygon);
             let inForbidden = false;
+            let withinDistance = true;
             const tempCoords = temp[0].geometry.coordinates;
 
-            for (const zone of this.forbidden) {
-                const zoneCoords = zone[0];
-                
-                if (geoPointInPolygon(tempCoords, zoneCoords)) {
-                    inForbidden = true;
+            if (startPoint) {
+                withinDistance = this.withinDistance(startPoint, tempCoords);
+            }
+
+            if (withinDistance) {
+                for (const zone of this.forbidden) {
+                    const zoneCoords = zone[0];
+                    
+                    if (geoPointInPolygon(tempCoords, zoneCoords)) {
+                        inForbidden = true;
+                        break;
+                    }
+                }
+                if (!inForbidden) {
+                    point = tempCoords;
                     break;
                 }
-            }
-            if (!inForbidden) {
-                point = tempCoords;
-                break;
             }
         }
         return point;
@@ -75,7 +118,7 @@ const tripGenerator = {
     getTripCoords: async function getTripCoords(start, end) {
         let params = {
             coordinates:[start, end],
-            preference:"shortest",
+            // preference:"shortest",
             options:
             {
                 avoid_polygons:
@@ -119,16 +162,16 @@ const tripGenerator = {
      * @param {bool} sameStartEnd - default is true which means that endpoint of last
      * trip will be start point of first trip, set to false if this is not a requirement
      */
-    generateMany: async function generateMany(bikes, routesPerBike=3, sameStartEnd=true) {
+    generateMany: async function generateMany(bikes) {
         const stopAt = counter.bikes + bikes;
 
         for (let bike=counter.bikes; bike<stopAt; bike++) {
             const initial = this.getPoint();
             let startPoint = initial;
-            let endPoint = this.getPoint();
+            let endPoint = this.getPoint(startPoint);
 
             while (endPoint === startPoint) {
-                endPoint = this.getPoint();
+                endPoint = this.getPoint(startPoint);
             }
             const bikeObj = {
                 city: this.cityid,
@@ -138,7 +181,7 @@ const tripGenerator = {
                 time_distance: [],
             };
     
-            for (let i=1; i<=routesPerBike; i++) {
+            for (let i=1; i<=this.routesPerBike; i++) {
                 try {
                     const trip = await this.getTripCoords(startPoint, endPoint);
                     const trip_decoded = this.reverseCoords((polyline.decode(trip.geometry)));
@@ -148,36 +191,35 @@ const tripGenerator = {
                     let waypoint_counter = 1;
                     const time_distance = trip.steps.map((waypoint) => {
                         fs.appendFileSync("./bike-routes/time-distance.csv", `"${bike}","${i}","${waypoint_counter}","${waypoint.distance}","${waypoint.duration}"\r\n`);
-
+    
                         waypoint_counter++;
                         return {
                             distance: waypoint.distance,
                             duration: waypoint.duration
                         }
                     })
-
+    
                     bikeObj.time_distance.push(time_distance);
                     bikeObj.trips_encoded.push(trip_encoded);
                     bikeObj.trips.push(trip_decoded);
         
                     // Append one trip to the general csv file
                     fs.appendFileSync("./bike-routes/routes.csv", `"${bike}","${i}","${trip_encoded}"\r\n`);
-
-                    startPoint = endPoint;
-                    if (i === routesPerBike - 1 && sameStartEnd && routesPerBike > 2) {
-                        endPoint = initial;
-                    } else {
-                        while (endPoint === startPoint) {
-                            endPoint = this.getPoint();
-                        }
-                    }
-
-                } catch(error) {
-                    console.error(error.name, error.message)
-                }
-
-            }
     
+                    startPoint = endPoint;
+                } catch (error) {
+                    i--
+                    console.log(error, "Bad response from OpenRouteService, will redo 1 route")
+                }
+                if (i === this.routesPerBike - 1 && this.sameStartEnd && this.routesPerBike > 2) {
+                    endPoint = initial;
+                } else {
+                    while (endPoint === startPoint) {
+                        endPoint = this.getPoint(startPoint);
+                    }
+                }
+            }
+
             // Save all trips for one bike to a new json file
             fs.writeFileSync(`./bike-routes/${bike}.json`, JSON.stringify(bikeObj, null, 4));
             counter.bikes += 1;
