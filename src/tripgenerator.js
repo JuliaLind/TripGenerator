@@ -31,6 +31,11 @@ const tripGenerator = {
     routesPerBike: 3,
 
     /**
+     * Number of bikes to generate routes for
+     */
+    bikes: 5,
+
+    /**
      * Maximal distance between start and endpoint
      * of a trip "birdway"
      */
@@ -47,11 +52,11 @@ const tripGenerator = {
      * @param {Number} cityid  - number of the json document containing
      * the city data
      */
-    setCoords: async function setCoords(cityid) {
-        const city = require(`../cities/${cityid}.json`);
+    setCoords: async function setCoords() {
+        const city = require(`../cities/${this.cityid}.json`);
 
         this.cityCoords = city.coords;
-        this.cityid = cityid;
+
 
         for (const zone of city.forbidden) {
             this.forbidden.push(zone.coordinates);
@@ -59,9 +64,6 @@ const tripGenerator = {
     },
 
     withinDistance: function withinDistance(startpoint, endpoint) {
-        console.log("start: ", startpoint);
-        console.log("end: ", endpoint);
-
         /**
          * distance is square root of (delta-x squared + delta-y squared)
          */
@@ -157,14 +159,10 @@ const tripGenerator = {
     },
 
     /**
-     * 
-     * @param {int} bikes - number of bikes to generate routes for
-     * @param {int} routesPerBike - number of routes to generate for each bike
-     * @param {bool} sameStartEnd - default is true which means that endpoint of last
-     * trip will be start point of first trip, set to false if this is not a requirement
+     * Generate many routes to json and csv files
      */
-    generateMany: async function generateMany(bikes) {
-        const stopAt = counter.bikes + bikes;
+    generateMany: async function generateMany() {
+        const stopAt = counter.bikes + this.bikes;
 
         for (let bike=counter.bikes; bike<stopAt; bike++) {
             const initial = this.getPoint();

@@ -15,11 +15,10 @@ In order to generate mock trips stand in the root directory and run the script w
 
 In order to start the web application where you can see the generated routes on the map, stand in the root directory and enter ```python3 -m http.server 9000``` and then visit localhost:9000 in your browser.
 
-Default params for cityid and number of bikes can be changed either directly in main.js file or by passing them via commandline in the following order ```node main.js <cityid> <bikes>```, where ```cityid``` it the id of the document with geometrydata you want to use for city zones and forbidden zones within the city, and  ```bikes``` is the number of bikes you want to generate routes for. 
+Cityid, number of bikes to generate routes for, number of routes per bike, wether the endpoint of last route should be same as startpoint of first route for each bike should be same or not, mindistance and maxdistance (birdway) are all attributes in src/tripgenerator.js and can be updated by yourself.
 
-Default params for routes per bike and sameStartEnd can only be changed via tripgenerator models attributes in src/tripgenerator.js . sameStartEnd is a boolean - true means that the end point of the last trip will be the same as startpoint of first trip (which enables looping through array over and over in a simulation), false means that the endpoint can be either same point or a different point that is in the city area and not in a forbidden zone.
+Default params for cityid and number of bikes can also be passed via commandline in the following order ```node main.js <cityid> <bikes>```, where ```cityid``` it the id of the document with geometrydata you want to use for city zones and forbidden zones within the city, and  ```bikes``` is the number of bikes you want to generate routes for. 
 
-In the tripgenerator model you can also the the parameters for the miminum distance and maximum distance for a trip "bird way".
 
 In the directory reset/ you can find a bash script that removes all previously generated routes and resets counter to zero. When starting the script with ```./reset.bash``` you will be prompted to confirm if you really wish to reset. You can confirm with any of Y | y | Yes | yes
 
