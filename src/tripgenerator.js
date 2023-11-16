@@ -141,12 +141,8 @@ const tripGenerator = {
             body: JSON.stringify(params)
         });
         const resJson = await res.json();
-        const route = {
-            geometry: resJson.routes[0].geometry,
-            steps: resJson.routes[0].segments[0].steps
-        };
 
-        return route;
+        return resJson.routes[0].geometry;
     },
 
     /**
@@ -177,7 +173,6 @@ const tripGenerator = {
                 initialStart: startPoint,
                 trips: [],
                 trips_encoded: [],
-                time_distance: [],
             };
 
             let route = 1
@@ -185,22 +180,11 @@ const tripGenerator = {
             while (route<=this.routesPerBike) {
                 try {
                     const trip = await this.getTripCoords(startPoint, endPoint);
-                    const trip_decoded = this.reverseCoords((polyline.decode(trip.geometry)));
+                    const trip_decoded = this.reverseCoords(polyline.decode(trip));
         
                     // encode again to get coords in correct order in encoded polyline
                     const trip_encoded = polyline.encode(trip_decoded);
-                    let waypoint_counter = 1;
-                    const time_distance = trip.steps.map((waypoint) => {
-                        fs.appendFileSync("./bike-routes/time-distance.csv", `"${bike}","${route}","${waypoint_counter}","${waypoint.distance}","${waypoint.duration}"\r\n`);
     
-                        waypoint_counter++;
-                        return {
-                            distance: waypoint.distance,
-                            duration: waypoint.duration
-                        }
-                    })
-    
-                    bikeObj.time_distance.push(time_distance);
                     bikeObj.trips_encoded.push(trip_encoded);
                     bikeObj.trips.push(trip_decoded);
         
@@ -210,7 +194,7 @@ const tripGenerator = {
                     startPoint = endPoint;
                     route++;
                 } catch (error) {
-                    console.log(error, "Bad response from OpenRouteService, will redo 1 route")
+                    console.error(error, "Bad response from OpenRouteService, will redo 1 route")
                 }
                 if (route === this.routesPerBike - 1 && this.sameStartEnd && this.routesPerBike > 2) {
                     endPoint = initial;
