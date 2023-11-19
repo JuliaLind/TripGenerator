@@ -1,3 +1,7 @@
+# Notifiation
+
+An extended version of this program is now available here: https://github.com/JuliaLind/TripGenerator-extended . The extended version maps each generated trip to a unique user object with a valid JWT-token that contains userid in the payload.
+
 # Summary
 
 This program uses https://openrouteservice.org API for auto-generating a number of consequent routes (end point for route n = start point for route n+1) for electric bikes, which takes into consideration obstacles and any polygons to avoid defined by yourself. See file /cities/1.json as where city.coords and city.forbidden are required.
