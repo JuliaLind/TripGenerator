@@ -52,7 +52,7 @@ const tripGenerator = {
      * @param {Number} cityid  - number of the json document containing
      * the city data
      */
-    setCoords: async function setCoords() {
+    setCoords: function setCoords() {
         const city = require(`../cities/${this.cityid}.json`);
 
         this.cityCoords = city.coords;
@@ -194,7 +194,11 @@ const tripGenerator = {
                     startPoint = endPoint;
                     route++;
                 } catch (error) {
-                    console.error(error, "Bad response from OpenRouteService, will redo 1 route")
+                    fs.writeFileSync(`./bike-routes/${bike}.json`, JSON.stringify(bikeObj, null, 4));
+                    counter.bikes += 1;
+                    fs.writeFileSync(`./counter.json`, JSON.stringify(counter, null, 4));
+                    console.error(error, "Bad response from OpenRouteService, exiting with status code 1")
+                    process.exit(1);
                 }
                 if (route === this.routesPerBike - 1 && this.sameStartEnd && this.routesPerBike > 2) {
                     endPoint = initial;

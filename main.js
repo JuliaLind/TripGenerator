@@ -14,5 +14,5 @@ const tripGenerator = require("./src/tripgenerator.js");
     }
 
     tripGenerator.setCoords();
-    tripGenerator.generateMany();
+    await tripGenerator.generateMany();
 })();
