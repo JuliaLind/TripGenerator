@@ -170,7 +170,7 @@ const tripGenerator = {
             }
             const bikeObj = {
                 city: this.cityid,
-                initialStart: startPoint,
+                initialStart: [],
                 trips: [],
                 trips_encoded: [],
             };
@@ -209,6 +209,7 @@ const tripGenerator = {
                 }
             }
 
+            bikeObj.initialStart = bikeObj.trips[0][0];
             // Save all trips for one bike to a new json file
             fs.writeFileSync(`./bike-routes/${bike}.json`, JSON.stringify(bikeObj, null, 4));
             counter.bikes += 1;
