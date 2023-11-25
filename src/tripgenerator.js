@@ -198,7 +198,7 @@ const tripGenerator = {
                     // Append one trip to the general csv file
                     fs.appendFileSync("./bike-routes/routes.csv", `"${bike}","${route}","${trip_encoded}"\r\n`);
     
-                    startPoint = endPoint;
+                    startPoint = trip_decoded.coords[trip_decoded.coords.length - 1];
                     route++;
                 } catch (error) {
                     fs.writeFileSync(`./bike-routes/${bike}.json`, JSON.stringify(bikeObj, null, 4));
@@ -210,7 +210,7 @@ const tripGenerator = {
                 if (route === this.routesPerBike - 1 && this.sameStartEnd && this.routesPerBike > 2) {
                     endPoint = initial;
                 } else {
-                    while (endPoint === startPoint) {
+                    while (endPoint === startPoint || !this.withinDistance(startPoint, endPoint)) {
                         endPoint = this.getPoint(startPoint);
                     }
                 }
