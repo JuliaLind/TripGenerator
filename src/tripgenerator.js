@@ -3,7 +3,8 @@ const geoPointInPolygon = require('geo-point-in-polygon');
 const token = require('../token.js');
 const fs = require('fs');
 const polyline = require('@mapbox/polyline');
-const counter = require("../counter.json")
+const counter = require("../counter.json");
+const geoTools = require('geo-tools');
 
 const tripGenerator = {
     cityid: 1,
@@ -39,13 +40,13 @@ const tripGenerator = {
      * Maximal distance between start and endpoint
      * of a trip "birdway"
      */
-    maxDistance: 0.0549976308604803,
+    maxDistance: 600,
 
     /**
      * Minimal distance between start and endpoint
      * of a trip "birdway"
      */
-    minDistance: 0.0192575756257603,
+    minDistance: 300,
 
     /**
      * Sets the coordinates for city area and the forbidden zones
@@ -64,12 +65,18 @@ const tripGenerator = {
     },
 
     withinDistance: function withinDistance(startpoint, endpoint) {
-        /**
-         * distance is square root of (delta-x squared + delta-y squared)
-         */
-        const distance = ((startpoint[0]-endpoint[0]) ** 2 + (startpoint[1]-endpoint[1]) ** 2) ** (1/2);
+        const from = {
+            lng: startpoint[0],
+            lat: startpoint[1]
+        }
+        const to = {
+            lng: endpoint[0],
+            lat: endpoint[1]
+        }
 
-        return distance >= this.minDistance ** 2 && distance <= this.maxDistance ** 2;
+        const meters = toMeters(distance(from, to));
+
+        return meters >= this.minDistance && meters <= this.maxDistance;
     },
 
     /**

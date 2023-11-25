@@ -1,6 +1,6 @@
-# Notifiation
+# Notification
 
-An extended version of this program is now available here: https://github.com/JuliaLind/TripGenerator-extended . The extended version maps each generated trip to a unique user object with a valid JWT-token that contains userid in the payload.
+As of 2023-11-26 this version will no longer be maintained. Please use the new and extended version of this program https://github.com/JuliaLind/TripGenerator-extended . The extended version maps each generated trip to a unique user object with a valid JWT-token that contains userid in the payload.
 
 # Summary
 
@@ -23,8 +23,8 @@ The following attributes are variable and can be set by yourself in the src/trip
 - cityid: the id of the document with geometrydata you want to use for city zones and forbidden zones within the city
 - number of bikes to generate routes for
 - number of routes to generate per bike
-- minimum distance between start point and end point of each route (birdway)
-- maximum distance between start point and end point of each route (birdway)
+- minimum distance between start point and end point of each route in meters(birdway)
+- maximum distance between start point and end point of each route in meters (birdway)
 - if the end point of the last route should be the same as start point of first route (for each bike, comes in handy if you want to loop through same sequence several times)
 
 Values for cityid and number of bikes can also be passed via commandline in the following order ```node main.js <cityid> <bikes>```, where ```cityid``` it the id of the document with geometrydata you want to use for city zones and forbidden zones within the city, and  ```bikes``` is the number of bikes you want to generate routes for. 
